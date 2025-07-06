@@ -1,0 +1,3 @@
+[submodule "bsky-util"]
+	path = bsky-util
+	url = git@github.com:aliceD1540/bsky-util.git
