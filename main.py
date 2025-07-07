@@ -81,10 +81,10 @@ def request_gemini_cli(post_data):
 # 現在時刻を5分単位に丸めて、5分前と10分前を計算
 now_utc = datetime.now(timezone.utc)
 now_rounded = now_utc.replace(minute=(now_utc.minute // 5) * 5, second=0, microsecond=0)
-# since, until = [(now_rounded - timedelta(minutes=m)).isoformat() for m in [5, 10]]
+since, until = [(now_rounded - timedelta(minutes=m)).isoformat() for m in [5, 10]]
 # テスト用に期間を3時間に設定
-since = (now_rounded - timedelta(hours=3)).isoformat()
-until = now_rounded.isoformat()
+# since = (now_rounded - timedelta(hours=3)).isoformat()
+# until = now_rounded.isoformat()
 
 posts = bsky_util.search_posts(
     query="#青空筋トレ部",
