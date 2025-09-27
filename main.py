@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 bsky_util = BlueskyUtil()
 bsky_util.load_session()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-2.5-pro")
 
 
 def download_image(post_data):
@@ -45,10 +45,20 @@ def request_gemini_cli(post_data):
     with open("rules.md", "r", encoding="utf-8") as f:
         rules = f.read()
 
-    prompt = rules + "\n\n" + post_data["text"]
+    # 現在時刻をプロンプトに追加
+    now_utc = datetime.now(timezone.utc)
+    now_jst = now_utc.astimezone(timezone(timedelta(hours=9)))
+    formatted_time = now_jst.strftime("%Y年%m月%d日 %H:%M:%S")
+
+    prompt = (
+        rules
+        + "\n\n# 投稿内容"
+        + f"\n\n現在の日時: {formatted_time}\n\n"
+        + post_data["text"]
+    )
 
     print("--- Prompt for Gemini ---")
-    # print(prompt)
+    print(prompt)
 
     # 画像を読み込む
     image_folder = "tmp_img"
@@ -81,10 +91,10 @@ def request_gemini_cli(post_data):
 # 現在時刻を5分単位に丸めて、5分前と10分前を計算
 now_utc = datetime.now(timezone.utc)
 now_rounded = now_utc.replace(minute=(now_utc.minute // 5) * 5, second=0, microsecond=0)
-since, until = [(now_rounded - timedelta(minutes=m)).isoformat() for m in [5, 10]]
+# since, until = [(now_rounded - timedelta(minutes=m)).isoformat() for m in [5, 10]]
 # テスト用に期間を3時間に設定
-# since = (now_rounded - timedelta(hours=3)).isoformat()
-# until = now_rounded.isoformat()
+since = (now_rounded - timedelta(hours=3)).isoformat()
+until = now_rounded.isoformat()
 
 posts = bsky_util.search_posts(
     query="#青空筋トレ部",
