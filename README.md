@@ -1,3 +1,7 @@
+# ⚠️ Deprecated / Archived Repository
+
+現在は [Cloudflare版](https://github.com/aliceD1540/exercise-trainer-bot-cloudflare) を作ってそちらを運用しています。
+
 # exercise-trainer-bot
 
 ## なにこれ
